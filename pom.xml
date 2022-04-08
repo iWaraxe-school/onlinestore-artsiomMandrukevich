@@ -11,7 +11,7 @@
     <modules>
         <module>domain</module>
         <module>store</module>
-        <module>ConsoleApp</module>
+        <module>consoleApp</module>
     </modules>
 
     <properties>
