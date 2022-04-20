@@ -5,10 +5,11 @@ import java.util.List;
 
 public class Category {
     public String name;
-    public List<Product> product;
+    public List<Product> productList;
 
     public Category(String name) {
         this.name = name;
+        this.productList = new ArrayList<>();
     }
 
 
@@ -16,10 +17,16 @@ public class Category {
         return name;
     }
 
-//    TO DO
-//    need understand what to do with prodict list
-//    public List<Product> getProduct() {
-//        return product;
-//    }
+    public void setProductList(Product product) {
+        this.productList.add(product);
+    }
 
+    public void printAllProducts(){
+        for(Integer i = 0; i < productList.size(); i++){
+            System.out.println("Product's name " + productList.get(i).getName()
+                    + " rate " + productList.get(i).getRate()
+                    + " price " + productList.get(i).getPrice()
+            );
+        }
+    }
 }
