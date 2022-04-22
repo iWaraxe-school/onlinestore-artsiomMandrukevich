@@ -1,9 +1,9 @@
 package by.issoft.domain;
 
 public class Product {
-    public String name;
-    public Integer rate;
-    public Integer price;
+    private String name;
+    private Integer rate;
+    private Integer price;
 
     public Product(String name, Integer rate, Integer price){
         this.name = name;
@@ -22,5 +22,7 @@ public class Product {
     public Integer getPrice() {
         return price;
     }
+
+
 
 }
