@@ -18,9 +18,8 @@ public class StoreHelper {
         this.store = store;
     }
 
-    RandomStorePopulator randomStorePopulator = new RandomStorePopulator();
-
     private Map<Category, Integer> createMapOfCatefory(){
+        RandomStorePopulator randomStorePopulator = new RandomStorePopulator();
         Map<Category, Integer> mapOfCategory = new HashMap<>();
 
         Reflections reflections = new Reflections("by.issoft.domain.categories", new SubTypesScanner());
@@ -37,6 +36,7 @@ public class StoreHelper {
     }
 
     public void fillOutProductList() {
+        RandomStorePopulator randomStorePopulator = new RandomStorePopulator();
         Map<Category, Integer> categiryProductList = createMapOfCatefory();
 
         for(Map.Entry<Category, Integer> fillEntry : categiryProductList.entrySet()) {
