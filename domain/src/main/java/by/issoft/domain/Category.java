@@ -12,6 +12,10 @@ public class Category {
         this.productList = new ArrayList<>();
     }
 
+    public List<Product> getProductList() {
+        return productList;
+    }
+
     public String getName() {
         return name;
     }
@@ -20,12 +24,4 @@ public class Category {
         this.productList.add(product);
     }
 
-    public void printAllProducts(){
-        for (Product product : productList) {
-            System.out.println("Product's name " + product.getName()
-                    + " rate " + product.getRate()
-                    + " price " + product.getPrice()
-            );
-        }
-    }
 }
