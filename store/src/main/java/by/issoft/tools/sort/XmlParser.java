@@ -1,4 +1,4 @@
-package by.issoft.tools;
+package by.issoft.tools.sort;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -10,6 +10,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.LinkedHashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.IntStream;
 
@@ -33,7 +34,7 @@ public class XmlParser {
                     .forEach(nodeProps -> IntStream.range(0, nodeProps.getLength()).mapToObj(nodeProps::item).filter(bookProp -> bookProp.getNodeType() != Node.TEXT_NODE)
                     .forEach(bookProp -> {
                         // put key/value into sortmap
-                        sortMap.put(bookProp.getNodeName(), SortValues.valueOf(bookProp.getChildNodes().item(0).getTextContent()));
+                        sortMap.put(bookProp.getNodeName(), SortValues.valueOf(bookProp.getChildNodes().item(0).getTextContent().toUpperCase(Locale.ROOT)));
                     }));
         } catch (ParserConfigurationException | SAXException | IOException ex) {
             ex.printStackTrace(System.out);
