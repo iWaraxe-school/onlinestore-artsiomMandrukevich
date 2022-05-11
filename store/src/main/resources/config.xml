@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <sort>
+        <name>desc</name>
+        <price>desc</price>
+        <rate>asc</rate>
+    </sort>
+</config>

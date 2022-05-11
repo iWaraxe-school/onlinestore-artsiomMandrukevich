@@ -14,11 +14,11 @@ public class StoreHelper {
 
     Store store;
 
+    RandomStorePopulator randomStorePopulator = new RandomStorePopulator();
+
     public StoreHelper(Store store) {
         this.store = store;
     }
-
-    RandomStorePopulator randomStorePopulator = new RandomStorePopulator();
 
     private Map<Category, Integer> createMapOfCatefory(){
         Map<Category, Integer> mapOfCategory = new HashMap<>();
