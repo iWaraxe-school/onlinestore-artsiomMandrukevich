@@ -10,8 +10,18 @@ public class Store {
 
     private List<Category> productCategoryList;
 
-    public Store(){
+    private Store(){
         this.productCategoryList = new ArrayList<>();
+    }
+
+    private static class SingletoneHelper{
+        private static final Store storeInstance = new Store();
+    }
+
+
+    public static Store getInstance(){
+        return SingletoneHelper.storeInstance;
+
     }
 
     public List<Product> getAllProducts(){
