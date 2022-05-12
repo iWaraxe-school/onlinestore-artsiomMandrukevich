@@ -15,9 +15,9 @@ public class StoreApp {
         StoreInteraction storeInteraction = new StoreInteraction(store);
 
         sh.fillOutProductList();
-        store.printProductFromCategory();
+//        store.printProductFromCategory();
 
-        storeInteraction.SortProducts();
+        storeInteraction.ConsoleInteraction();
 
     }
 }
