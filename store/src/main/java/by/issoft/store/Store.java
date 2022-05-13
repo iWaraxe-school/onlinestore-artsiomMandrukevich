@@ -11,11 +11,21 @@ public class Store {
 
     private List<Category> productCategoryList;
 
-    public Store(){
+    private Store(){
         this.productCategoryList = new ArrayList<>();
     }
 
-    StoreComparator storeComparator = new StoreComparator();
+
+    private static class SingletoneHelper{
+        private static final Store storeInstance = new Store();
+    }
+
+
+    public static Store getInstance(){
+        return SingletoneHelper.storeInstance;
+
+    }
+
 
     public List<Product> getAllProducts(){
         List<Product> listProduct = new ArrayList<>();
