@@ -10,7 +10,8 @@ public class StoreApp {
 
     public static void main(String[] args) throws IOException {
 
-        Store store = new Store();
+        Store store = Store.getInstance();
+
         StoreHelper sh = new StoreHelper(store);
         StoreInteraction storeInteraction = new StoreInteraction(store);
 
