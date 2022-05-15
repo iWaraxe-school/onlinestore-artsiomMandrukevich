@@ -2,6 +2,7 @@ package by.issoft.store;
 
 import by.issoft.domain.Category;
 import by.issoft.domain.Product;
+import by.issoft.tools.sort.StoreComparator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,9 +11,21 @@ public class Store {
 
     private List<Category> productCategoryList;
 
-    public Store(){
+    private Store(){
         this.productCategoryList = new ArrayList<>();
     }
+
+
+    private static class SingletoneHelper{
+        private static final Store storeInstance = new Store();
+    }
+
+
+    public static Store getInstance(){
+        return SingletoneHelper.storeInstance;
+
+    }
+
 
     public List<Product> getAllProducts(){
         List<Product> listProduct = new ArrayList<>();
@@ -38,4 +51,13 @@ public class Store {
             printProduct(outputList.getProductList());
         }
     }
+
+    public void printSortProducts(){
+        printProduct(storeComparator.sortProduct(getAllProducts()));
+    }
+
+    public void printTopProducts(){
+        printProduct(storeComparator.top5ProductPrice(getAllProducts()));
+    }
+
 }
