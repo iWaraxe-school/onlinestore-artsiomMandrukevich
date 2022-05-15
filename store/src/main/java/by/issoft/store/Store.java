@@ -11,6 +11,8 @@ public class Store {
 
     private List<Category> productCategoryList;
 
+    StoreComparator storeComparator = new StoreComparator();
+
     private Store(){
         this.productCategoryList = new ArrayList<>();
     }

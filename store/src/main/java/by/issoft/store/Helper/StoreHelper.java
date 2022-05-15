@@ -1,6 +1,8 @@
 package by.issoft.store.Helper;
 
 import by.issoft.domain.Category;
+import by.issoft.domain.CategoryFactory;
+import by.issoft.domain.CategoryType;
 import by.issoft.domain.Product;
 import by.issoft.store.Store;
 
@@ -20,7 +22,7 @@ public class StoreHelper {
         this.store = store;
     }
 
-    private Map<Category, Integer> createMapOfCatefory(){
+    private Map<Category, Integer> createMapOfCategoryReflection(){
         Map<Category, Integer> mapOfCategory = new HashMap<>();
 
         Reflections reflections = new Reflections("by.issoft.domain.categories", new SubTypesScanner());
@@ -36,10 +38,20 @@ public class StoreHelper {
         return mapOfCategory;
     }
 
-    public void fillOutProductList() {
-        Map<Category, Integer> categiryProductList = createMapOfCatefory();
+    private Map<Category, Integer> createMapOfCategoryByFactory(){
+        Map<Category, Integer> mapOfCategoryByFactory = new HashMap<>();
+        CategoryFactory categoryFactory = new CategoryFactory();
 
-        for(Map.Entry<Category, Integer> fillEntry : categiryProductList.entrySet()) {
+        for(CategoryType categoryType : CategoryType.values()){
+            mapOfCategoryByFactory.put(categoryFactory.getCategory(categoryType), randomStorePopulator.setRandomInt());
+        }
+        return mapOfCategoryByFactory;
+    }
+
+    public void fillOutProductList() {
+        Map<Category, Integer> categoryProductList = createMapOfCategoryByFactory();
+
+        for(Map.Entry<Category, Integer> fillEntry : categoryProductList.entrySet()) {
             for (int i = 0; i< fillEntry.getValue(); i++){
                 Product product = new Product(
                         randomStorePopulator.setName(fillEntry.getKey().getName()),
