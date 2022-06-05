@@ -1,7 +1,7 @@
 package by.issoft.store.Helper;
 
+import by.issoft.store.Middleware.*;
 import by.issoft.store.Store;
-import by.issoft.tools.sort.StoreComparator;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,11 +9,11 @@ import java.io.InputStreamReader;
 
 public class StoreInteraction {
 
-    Store store;
-    StoreComparator storeComparator = new StoreComparator();
+    static Store store;
+    private static MiddlewareServer middlewareServer;
 
     public StoreInteraction(Store store) {
-        this.store = store;
+        StoreInteraction.store = store;
     }
 
     public String InputString() throws IOException {
@@ -21,20 +21,23 @@ public class StoreInteraction {
         return reader.readLine();
     }
 
-    public void SortProducts() throws IOException {
+    private static void initMiddleware() {
+        middlewareServer = new MiddlewareServer();
+
+        Middleware middleware = new SortMiddleware(store);
+        middleware.linkWith(new TopMiddleware(store))
+                .linkWith(new QuitMiddleware()).linkWith(new UnknownMiddleware());
+
+        middlewareServer.setMiddleware(middleware);
+    }
+
+    public void ConsoleInteraction() throws IOException {
+        initMiddleware();
         boolean isQuit = false;
-        while (!isQuit) {
-            System.out.println("Enter command (sort, top, quit)");
-            switch (InputString()) {
-                case "sort": store.printProduct(storeComparator.sortProduct(store.getAllProducts()));
-                    break;
-                case "top": store.printProduct(storeComparator.top5ProductPrice(store.getAllProducts()));
-                    break;
-                case "quit": isQuit = true;
-                    break;
-                default: System.out.println("Oooops, something wrong !");
-                    break;
-            }
+
+        while(!isQuit){
+            System.out.print("Enter command (sort, top, quit): ");
+            isQuit = middlewareServer.processingMiddleware(InputString());
         }
     }
 
