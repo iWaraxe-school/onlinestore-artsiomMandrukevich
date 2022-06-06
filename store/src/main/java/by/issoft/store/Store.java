@@ -1,20 +1,26 @@
 package by.issoft.store;
 
 import by.issoft.domain.Category;
+import by.issoft.domain.CategoryFactory;
+import by.issoft.domain.CategoryType;
 import by.issoft.domain.Product;
+import by.issoft.store.Helper.RandomStorePopulator;
 import by.issoft.tools.sort.StoreComparator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Store {
 
     private List<Category> productCategoryList;
+    private CopyOnWriteArrayList<Category> purchasedCategory;
 
     StoreComparator storeComparator = new StoreComparator();
 
     private Store(){
         this.productCategoryList = new ArrayList<>();
+        this.purchasedCategory = new CopyOnWriteArrayList<>();
     }
 
 
@@ -28,6 +34,7 @@ public class Store {
 
     }
 
+    // Store's methods
 
     public List<Product> getAllProducts(){
         List<Product> listProduct = new ArrayList<>();
@@ -60,6 +67,37 @@ public class Store {
 
     public void printTopProducts(){
         printProduct(storeComparator.top5ProductPrice(getAllProducts()));
+    }
+
+    // Purchase's methods
+
+    public Category createRandomPurchaseGood(){
+        RandomStorePopulator randomStorePopulator = new RandomStorePopulator();
+        Category category = new CategoryFactory().getCategory(CategoryType.randomDirection());
+        Product product = new Product(
+                randomStorePopulator.setName(category.getName()),
+                randomStorePopulator.setRate(),
+                randomStorePopulator.setPrice()
+        );
+        category.setProductList(product);
+        return category;
+    }
+
+    public void setPurchaseGoods(){
+        this.purchasedCategory.add(createRandomPurchaseGood());
+    }
+
+
+    public void printPurchaseCollection(){
+        System.out.println("Size of purchases is " + this.purchasedCategory.size());
+        for(Category outputList : this.purchasedCategory) {
+            System.out.println("Category = " + outputList.getName());
+            printProduct(outputList.getProductList());
+        }
+    }
+
+    public void cleanUpPurchasedCollection(){
+        this.purchasedCategory.clear();
     }
 
 }
