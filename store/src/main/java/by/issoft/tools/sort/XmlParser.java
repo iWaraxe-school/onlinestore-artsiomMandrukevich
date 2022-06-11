@@ -40,4 +40,5 @@ public class XmlParser {
             ex.printStackTrace(System.out);
         }
     }
+
 }

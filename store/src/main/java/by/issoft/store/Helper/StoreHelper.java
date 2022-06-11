@@ -3,14 +3,13 @@ package by.issoft.store.Helper;
 import by.issoft.domain.Category;
 import by.issoft.domain.CategoryFactory;
 import by.issoft.domain.CategoryType;
-import by.issoft.domain.Product;
+import by.issoft.store.Database.SQLStatements;
 import by.issoft.store.Store;
 
-import org.reflections.Reflections;
-import org.reflections.scanners.SubTypesScanner;
-
-import java.lang.reflect.InvocationTargetException;
 import java.util.*;
+
+import static by.issoft.store.Database.SQLInstructions.INSERT_INTO_PRODUCT;
+import static by.issoft.store.Database.SQLInstructions.SELECT_FROM_CATEGORY;
 
 public class StoreHelper {
 
@@ -18,49 +17,54 @@ public class StoreHelper {
 
     RandomStorePopulator randomStorePopulator = new RandomStorePopulator();
 
+    SQLHelper sqlHelper = new SQLHelper();
+    SQLStatements sqlStatements = new SQLStatements();
+
     public StoreHelper(Store store) {
         this.store = store;
     }
 
-    private Map<Category, Integer> createMapOfCategoryReflection(){
-        Map<Category, Integer> mapOfCategory = new HashMap<>();
+    private Map<Category, Integer> createMapOfCategoryFromDataBase(){
 
-        Reflections reflections = new Reflections("by.issoft.domain.categories", new SubTypesScanner());
-        Set<Class<? extends Category>> subTypes = reflections.getSubTypesOf(Category.class);
+        // Connect to DB, insert rows into Category table from CategoryType enum
+        sqlHelper.startWorkWithDatabase();
+        sqlHelper.insertCategoryFromEnumCategoryTypeIntoCategoryTable();
 
-        for(Class<? extends Category> type : subTypes){
-            try{
-                mapOfCategory.put(type.getConstructor().newInstance(), randomStorePopulator.setRandomInt());
-            } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException | InstantiationException e){
-                e.printStackTrace();
-            }
-        }
-        return mapOfCategory;
-    }
+        // Select list of category from DataBase
+        List<String> categoryListDB = sqlHelper.getListOfCategoryFromCategoryTable(sqlStatements.executeStatementQuery(SELECT_FROM_CATEGORY));
 
-    private Map<Category, Integer> createMapOfCategoryByFactory(){
-        Map<Category, Integer> mapOfCategoryByFactory = new HashMap<>();
+        // Create map of category from DataBase
+        Map<Category, Integer> mapOfCategoryByDataBase = new HashMap<>();
         CategoryFactory categoryFactory = new CategoryFactory();
-
-        for(CategoryType categoryType : CategoryType.values()){
-            mapOfCategoryByFactory.put(categoryFactory.getCategory(categoryType), randomStorePopulator.setRandomInt());
+        for(String categoryTypeFromDB : categoryListDB){
+            mapOfCategoryByDataBase.put(categoryFactory.getCategory(CategoryType.valueOf(categoryTypeFromDB.toUpperCase())), randomStorePopulator.setRandomInt());
         }
-        return mapOfCategoryByFactory;
+        return mapOfCategoryByDataBase;
     }
 
     public void fillOutProductList() {
-        Map<Category, Integer> categoryProductList = createMapOfCategoryByFactory();
+        Map<Category, Integer> categoryProductList = createMapOfCategoryFromDataBase();
 
         for(Map.Entry<Category, Integer> fillEntry : categoryProductList.entrySet()) {
             for (int i = 0; i< fillEntry.getValue(); i++){
-                Product product = new Product(
+//                // I commented this part specially, because I want to store products only into DB
+//                Product product = new Product(
+//                        randomStorePopulator.setName(fillEntry.getKey().getName()),
+//                        randomStorePopulator.setRate(),
+//                        randomStorePopulator.setPrice()
+//                );
+//                // set Category and Product to the STORE
+//                 fillEntry.getKey().setProductList(product);
+
+                // insert  Category and Product to the STORE
+                sqlStatements.executeInsertIntoProductOrPurchaseTable(INSERT_INTO_PRODUCT,
                         randomStorePopulator.setName(fillEntry.getKey().getName()),
                         randomStorePopulator.setRate(),
-                        randomStorePopulator.setPrice()
-                );
-                fillEntry.getKey().setProductList(product);
+                        randomStorePopulator.setPrice(),
+                        fillEntry.getKey().getName());
             }
-            this.store.setProductCategoryList(fillEntry.getKey());
+//            // I commented this part specially, because I want to store products only into DB
+//            this.store.setProductCategoryList(fillEntry.getKey());
         }
     }
 }
