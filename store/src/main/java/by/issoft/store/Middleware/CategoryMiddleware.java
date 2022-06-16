@@ -3,21 +3,20 @@ package by.issoft.store.Middleware;
 import by.issoft.store.HTTP.HTTPHelper;
 import by.issoft.store.Store;
 
-public class SortMiddleware extends Middleware{
+public class CategoryMiddleware extends Middleware{
 
     Store store;
     HTTPHelper httpHelper = new HTTPHelper();
 
-    public SortMiddleware(Store store) {
+    public CategoryMiddleware(Store store) {
         this.store = store;
     }
 
     public boolean check(String consoleCommand) {
-        if(consoleCommand.toUpperCase().equals(CommandValues.SORT.toString())){
-            httpHelper.httpClientHitEndpoint("/get-sort-products");
+        if(consoleCommand.toUpperCase().equals(CommandValues.CATEGORY.toString())){
+            httpHelper.httpClientHitEndpoint("/get-category");
             return false;
         }
         return checkNext(consoleCommand);
     }
-
 }
