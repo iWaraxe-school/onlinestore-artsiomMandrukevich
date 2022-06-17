@@ -30,6 +30,8 @@ public class StoreInteraction {
         middleware.linkWith(new TopMiddleware(store))
                 .linkWith(new CreateOrderMiddleware(store))
                 .linkWith(new PrintPurchasesMiddleware(store))
+                .linkWith(new CategoryMiddleware(store))
+                .linkWith(new ClearPurchasesMiddleware(store))
                 .linkWith(new QuitMiddleware())
                 .linkWith(new UnknownMiddleware());
 
@@ -43,7 +45,7 @@ public class StoreInteraction {
 
         while(!isQuit){
             TimeUnit.MILLISECONDS.sleep(300);
-            System.out.print("Enter command (sort, top, create_order, print_purchases, quit): ");
+            System.out.print("Enter command (category, sort, top, create_random_purchase, print_purchases, clear_purchases, quit): ");
             isQuit = middlewareServer.processingMiddleware(InputString());
         }
     }
